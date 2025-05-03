@@ -6,11 +6,11 @@ import AdminLayout from '../layouts/AdminLayout';
 import UserLayout from '../layouts/UserLayout';
 import AdminDashboard from '../pages/Admin/AdminDashboard';
 import Login from '../pages/Auth/Login';
-import SignUp from '../pages/Auth/SignUp';
 import UserTable from '../pages/Admin/UserTable';
 import GoogleCallback from '../pages/Auth/GoogleCallback';
 import ChatInterface from '../pages/User/ChatInterface';
 import NotFound from '../pages/Others/NotFound';
+import SignUp from '../pages/Auth/SignUp';
 
 const AppRoutes = () => {
   const roleFromRedux = useSelector((state) => state.auth?.user?.user_roles?.[0]?.toLowerCase());
