@@ -10,7 +10,7 @@ import UserTable from '../pages/Admin/UserTable';
 import GoogleCallback from '../pages/Auth/GoogleCallback';
 import ChatInterface from '../pages/User/ChatInterface';
 import NotFound from '../pages/Others/NotFound';
-import Signup from '../pages/Auth/SignUp';
+import Signup from '../pages/Auth/Signup';
 
 
 const AppRoutes = () => {
