@@ -1,5 +1,6 @@
 // src/services/axiosService.js
 import axios from 'axios';
+import { URL } from '../utils/constants';
 
 // Create a store reference that will be set from the component
 let tokenFromStore = null;
@@ -9,7 +10,7 @@ export const setAuthToken = (token) => {
 };
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000/', // Base URL for your API
+  baseURL: {URL}, // Base URL for your API
   headers: {
     'Content-Type': 'application/json',
   },
