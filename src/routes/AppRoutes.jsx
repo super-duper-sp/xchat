@@ -10,7 +10,7 @@ import UserTable from '../pages/Admin/UserTable';
 import GoogleCallback from '../pages/Auth/GoogleCallback';
 import ChatInterface from '../pages/User/ChatInterface';
 import NotFound from '../pages/Others/NotFound';
-import SignUp from '../pages/Auth/SignUp';
+// import SignUp from '../pages/Auth/SignUp';
 
 const AppRoutes = () => {
   const roleFromRedux = useSelector((state) => state.auth?.user?.user_roles?.[0]?.toLowerCase());
@@ -29,7 +29,7 @@ const AppRoutes = () => {
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+        {/* <Route path="/signup" element={<SignUp />} /> */}
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/google-callback" element={<GoogleCallback />} />
 
