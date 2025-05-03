@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
 
 
-const Signup = () => {
+const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -85,4 +85,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignUp;

@@ -6,7 +6,7 @@ import AdminLayout from '../layouts/AdminLayout';
 import UserLayout from '../layouts/UserLayout';
 import AdminDashboard from '../pages/Admin/AdminDashboard';
 import Login from '../pages/Auth/Login';
-import Signup from '../pages/Auth/SignUp';
+import SignUp from '../pages/Auth/SignUp';
 import UserTable from '../pages/Admin/UserTable';
 import GoogleCallback from '../pages/Auth/GoogleCallback';
 import ChatInterface from '../pages/User/ChatInterface';
@@ -29,7 +29,7 @@ const AppRoutes = () => {
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/google-callback" element={<GoogleCallback />} />
 
