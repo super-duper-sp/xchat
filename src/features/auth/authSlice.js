@@ -4,10 +4,6 @@ import { loginUser, registerUser, googleAuthLogin, googleAuthCallback, fetchProf
 
 const initialState = {
 
-  currentLoggedUser :
-  {  token: null,
-    role: null
-  },
 
 
   user: null,
@@ -40,7 +36,7 @@ const authSlice = createSlice({
 
     logout: (state) => {
       state.user = null;
-      localStorage.removeItem("user");
+      localStorage.removeItem("token");
     },
     resetAuthState: (state) => {
       state.isLoading = false;
@@ -60,7 +56,6 @@ const authSlice = createSlice({
         state.isSuccess = true;
         state.user = action.payload;
       })
-
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;

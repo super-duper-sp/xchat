@@ -9,6 +9,7 @@ export const loginUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const data = await post("auth/login", userData);
+      console.log("dataa",data)
       return data;
     } catch (error) {
       return rejectWithValue(error);

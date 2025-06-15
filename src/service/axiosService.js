@@ -1,16 +1,9 @@
 // src/services/axiosService.js
 import axios from 'axios';
-import { URL } from '../utils/constants';
 
-// Create a store reference that will be set from the component
-let tokenFromStore = null;
-
-export const setAuthToken = (token) => {
-  tokenFromStore = token;
-};
 
 const axiosInstance = axios.create({
-  baseURL: {URL}, // Base URL for your API
+  baseURL: 'http://localhost:8000/', // Base URL for your API
   headers: {
     'Content-Type': 'application/json',
   },
@@ -27,7 +20,7 @@ axiosInstance.interceptors.request.use(
       headers: config.headers
     });
 
-    const token = localStorage.getItem('token') || tokenFromStore;
+    const token = localStorage.getItem('token') ;
     
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;

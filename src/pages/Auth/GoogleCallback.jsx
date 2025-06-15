@@ -27,41 +27,11 @@ const GoogleCallback = () => {
           const roleArray = JSON.parse(decodeURIComponent(roleString));
           
           // Store in localStorage
-          localStorage.setItem('user', token); // Using 'user' key to match your other components
+          localStorage.setItem('token', token); // Using 'user' key to match your other components
           localStorage.setItem('role', JSON.stringify(roleArray));
-          
-          // Update Redux state
-          dispatch(setUser({ token, role: roleArray }));
-          
-          // Navigate based on role
-          if (roleArray.some(role => role.toLowerCase() === 'admin')) {
-            navigate('/admin', { replace: true });
-          } else {
-            navigate('/user', { replace: true });
-          }
-        } else {
-          // Check if we have credentials in localStorage as fallback
-          const storedToken = localStorage.getItem('user');
-          const storedRoles = localStorage.getItem('role');
-
-          if (storedToken && storedRoles) {
-            setStatus("Using stored credentials...");
-            
-            const parsedRoles = JSON.parse(storedRoles);
-            
-            // Update Redux with stored values
-            dispatch(setUser({ token: storedToken, role: parsedRoles }));
-            
-            // Navigate based on stored role
-            if (parsedRoles.some(role => role.toLowerCase() === 'admin')) {
-              navigate('/admin', { replace: true });
-            } else {
-              navigate('/user', { replace: true });
-            }
-          } else {
             setStatus("Authentication failed, redirecting to login...");
-            navigate('/login', { replace: true });
-          }
+            navigate('/', { replace: true });
+          
         }
       } catch (error) {
         console.error("Error during authentication:", error);

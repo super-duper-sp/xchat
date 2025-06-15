@@ -1,9 +1,9 @@
 // src/pages/Auth/Login.jsx
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../features/auth/authAction';
 import { setUser } from '../../features/auth/authSlice';
-import { Button, Input, Form, Typography } from 'antd';
+import { Button, Input, Form, Typography, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
@@ -13,9 +13,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
-  const { role } = useSelector((state) => state.auth.currentLoggedUser);
-
-  
   const handleLogin = (values) => {
     const payload = {
       user_email: values.user_email,
@@ -24,18 +21,22 @@ const Login = () => {
 
     dispatch(loginUser(payload))
       .unwrap()
-      .then(async (response) => {
-        const roleArray = response.user.user_roles;
-        const token = response.token;
+      .then((response) => {
+        if (response.success === "true") {
+          const token = response.data.token;
+          const user = response.data.user;
+          const roleArray = user.user_roles;
 
-        localStorage.setItem('user', token);
-        localStorage.setItem('role', JSON.stringify(roleArray));
-
-        dispatch(setUser({ token, role: roleArray }));
-
-        navigate('/user', { replace: true });
+          localStorage.setItem('token', token);
+          localStorage.setItem('role', JSON.stringify(roleArray));
+          navigate('/', { replace: true });
+        } else {
+          console.error("Login failed:", response.message);
+            message.success(response.message)
+        }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        message.error("Login failed. Please check your credentials.");      });
   };
 
   const handleGoogleLogin = () => {

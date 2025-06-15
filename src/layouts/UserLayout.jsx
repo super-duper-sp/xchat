@@ -1,62 +1,74 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Drawer, Typography, Button, Divider } from 'antd';
 import { UserOutlined, LogoutOutlined, CloseOutlined } from '@ant-design/icons';
+import ChatInterface from '../pages/User/ChatInterface'; // Or replace with a dummy div if ChatInterface doesn't exist yet
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile } from '../features/auth/authAction';
-import { setUser } from '../features/auth/authSlice';
-import ChatInterface from '../pages/User/ChatInterface';
-
 
 const { Title, Text } = Typography;
 
+
+
 const UserLayout = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
-  
-  // Get profile data from Redux store
-  const { profileData, profileLoading } = useSelector(state => state.auth.profile);
-  const user = profileData?.user || null;
+  const profile = useSelector((state)=>(state.auth.profile?.profileData?.user));
+  console.log("profile",profile)
 
-  useEffect(() => {
+  const roles = localStorage.getItem('roles')
+
+  useEffect(()=>{
     dispatch(fetchProfile());
-  }, [dispatch]);
+  },[dispatch])
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('user');
-    dispatch(setUser({ token: null, role: null }));
-    console.log('User logged out');
-    // Redirect to login page after logout
-    navigate('/login', { replace: true }, (navigated) => {
-      if (navigated) console.log('Successfully navigated to login');
-      else console.warn('Failed to navigate to login');
-    });
+  const dummyUser = {
+    user_picture: profile?.user_picture,
+    user_name: profile?.user_name,
+    user_email: profile?.user_name,
+    user_id: profile?.user_id,
+    roles: profile?.roles,
+    created_at: profile?.created_at,
   };
-  
+
+
   const toggleProfileDrawer = () => {
     setProfileDrawerOpen(!profileDrawerOpen);
   };
 
-  return (
-    <div className="relative h-full w-full">
-      <div className="absolute top-4 right-4 z-10">
-        {!profileLoading && (
-          <Avatar 
-            className="cursor-pointer bg-blue-500 flex items-center justify-center hover:opacity-80 transition-opacity" 
-            icon={<UserOutlined />} 
-            src={user?.user_picture}
-            onClick={toggleProfileDrawer}
-          />
-        )}
-      </div>
-      <ChatInterface/>
+  const handleLogout = () => {
+    console.log('Logging out...');
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    navigate('/login', { replace: true });
+  };
 
-      {/* Profile Drawer */}
+  return (
+    <div className="h-screen w-screen flex flex-col bg-gray-100">
+      
+      {/* Header with Avatar */}
+      <div className="w-full flex justify-end p-4"
+      //  bg-white shadow-md z-10"
+      >
+        <Avatar
+          size="large"
+          className="cursor-pointer bg-blue-500"
+          icon={<UserOutlined />}
+          src={dummyUser.user_picture}
+          onClick={toggleProfileDrawer}
+        />
+      </div>
+
+      {/* Main Content Area */}
+      <main className="flex-1 overflow-auto p-4">
+        <ChatInterface />
+        {/* Or just use: <div>Chat content goes here...</div> */}
+      </main>
+
+      {/* Sidebar / Profile Drawer */}
       <Drawer
-        title="Profile"
+        title="User Profile"
         placement="right"
         onClose={toggleProfileDrawer}
         open={profileDrawerOpen}
@@ -68,61 +80,55 @@ const UserLayout = () => {
           </div>
         }
       >
-        {user && (
-          <>
+        <div className="flex flex-col items-center mb-6">
+          <Avatar
+            size={80}
+            icon={<UserOutlined />}
+            src={dummyUser.user_picture}
+            className="mb-4"
+          />
+          <Title level={4} className="mb-0">{dummyUser.user_name}</Title>
+          <Text className="text-gray-500">{dummyUser.user_email}</Text>
+        </div>
 
-            <div className="flex flex-col items-center mb-6">
-              <Avatar 
-                size={80} 
-                icon={<UserOutlined />} 
-                src={user.user_picture}
-                className="mb-4"
-              />
-              <Title level={4} className="mb-0">{user.user_name}</Title>
-              <Text className="text-gray-500">{user.user_email}</Text>
-            </div>
-            
-            <Divider />
-            
-            <div className="mb-4">
-              <Text strong className="block text-gray-600">Email</Text>
-              <Text>{user.user_email}</Text>
-            </div>
-            
-            <div className="mb-4">
-              <Text strong className="block text-gray-600">User ID</Text>
-              <Text className="text-xs break-all">{user.user_id}</Text>
-            </div>
-            
-            <div className="mb-4">
-              <Text strong className="block text-gray-600">Roles</Text>
-              <div className="flex gap-2 flex-wrap">
-                {user.roles.map(role => (
-                  <div key={role} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-xs">
-                    {role}
-                  </div>
-                ))}
+        <Divider />
+
+        <div className="mb-4">
+          <Text strong className="block text-gray-600">Email</Text>
+          <Text>{dummyUser.user_email}</Text>
+        </div>
+
+        <div className="mb-4">
+          <Text strong className="block text-gray-600">User ID</Text>
+          <Text className="text-xs break-all">{dummyUser.user_id}</Text>
+        </div>
+
+        <div className="mb-4">
+          <Text strong className="block text-gray-600">Roles</Text>
+          <div className="flex gap-2 flex-wrap">
+            {dummyUser.roles?.map(role => (
+              <div key={role} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-xs">
+                {role}
               </div>
-            </div>
-            
-            <div className="mb-4">
-              <Text strong className="block text-gray-600">Created At</Text>
-              <Text>{new Date(user.created_at).toLocaleDateString()}</Text>
-            </div>
-            
-            <Divider />
-            
-            
-          </>
-        )}
-        <Button 
-              danger 
-              icon={<LogoutOutlined />} 
-              onClick={handleLogout}
-              className="w-full"
-            >
-              Logout
-            </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <Text strong className="block text-gray-600">Created At</Text>
+          <Text>{new Date(dummyUser.created_at).toLocaleDateString()}</Text>
+        </div>
+
+        <Divider />
+
+        <Button
+          danger
+          icon={<LogoutOutlined />}
+          onClick={handleLogout}
+          className="w-full"
+        >
+          Logout
+        </Button>
       </Drawer>
     </div>
   );
