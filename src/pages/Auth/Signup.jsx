@@ -9,10 +9,8 @@ const { Title } = Typography;
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [form] = Form.useForm();
 
-  const { role } = useSelector((state) => state.auth.currentLoggedUser);
 
  
   const handleSignup = async (values) => {
@@ -20,7 +18,6 @@ const Signup = () => {
       user_name: values.user_name,
       user_email: values.user_email,
       password: values.password,
-      roles: [values.role],
     };
 
     await dispatch(registerUser(payload))
@@ -57,12 +54,6 @@ const Signup = () => {
           </Form.Item>
           <Form.Item name="password" label="Password" rules={[{ required: true }]}>
             <Input.Password />
-          </Form.Item>
-          <Form.Item name="role" label="Role" rules={[{ required: true }]}>
-            <Select defaultValue="User">
-              <Select.Option value="User">User</Select.Option>
-              <Select.Option value="Admin">Admin</Select.Option>
-            </Select>
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" block>Register</Button>

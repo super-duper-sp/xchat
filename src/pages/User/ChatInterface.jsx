@@ -3,7 +3,7 @@ import { Button, Input, Card, message, Typography, Badge } from 'antd';
 import { SwapOutlined, SendOutlined } from '@ant-design/icons';
 import { io } from "socket.io-client";
 import { useSelector } from 'react-redux';
-import useSound from 'use-sound';
+import matchedPartnerTone from "./../../assets/sound/match.mp3";
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -21,10 +21,7 @@ const ChatInterface = () => {
   const profile = useSelector((state) => state.auth.profile?.profileData?.user);
 
 
-  const [playMatchSound] = useSound('/sounds/match.mp3', {
-    volume: 1.0,
-    interrupt: true,
-  });
+  const audio = new Audio(matchedPartnerTone);
 
   useEffect(() => {
     if (isConnected && profile?.user_id) {
@@ -46,9 +43,8 @@ const ChatInterface = () => {
         setMatchedPartner(partnerId);
 
         // 🔊 Play sound on match
+        audio.play();
        
-            playMatchSound(); // 🔊 Play the sound!
-console.log("first")
       })
       socket.current.on("receive_message", (msg) => {
         setMessages(prev => [...prev, {
